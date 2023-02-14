@@ -57,7 +57,7 @@
                                 My Account
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <button class="dropdown-item" type="button">
+                                <button class="dropdown-item nav-login" type="button">
                                     Sign in
                                 </button>
                                 <button class="dropdown-item" type="button">
@@ -322,3 +322,10 @@
             </div>
         </div>
         <!-- Navbar End -->
+
+        <script>
+            //Hide unhide login
+            document.querySelector(".nav-login").addEventListener("click", function () {
+                document.querySelector(".login-popup").style.display ="flex";
+            });
+        </script>
