@@ -11,20 +11,20 @@
             $statement -> execute(
                 array(
                 'username' => $_POST["username"],
-                'password' => $_POST["password"]
+                'password' => md5($_POST["password"])
                 )
             );
             $count = $statement->rowCount();
-            //$user = $statement->fetch(PDO::FETCH_ASSOC);
+            $user = $statement->fetch(PDO::FETCH_ASSOC);
             if($count > 0){
                 $_SESSION["username"] = $_POST["username"];
                 $_SESSION['loggedin'] = true;
-                // if($user["role"] == 1){
+                if($user["role_id"] == 1){
                      header("Location:admin/index.php");
-                // }
-                // elseif ($user["role"] == 0){
-                //     header("Location:index.php");
-                // }
+                }
+                elseif ($user["role_id"] == 0){
+                    header("Location:index.php");
+                }
             }
             // else{
             //     $message = '<label>Username or password is wrong</lable>';

@@ -54,15 +54,25 @@
                                 class="btn btn-sm btn-light dropdown-toggle"
                                 data-toggle="dropdown"
                             >
-                                My Account
+                                <?php
+                                    if(isset($_SESSION["username"])) echo $_SESSION["username"];
+                                    else echo "My account";
+                                ?>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <button class="dropdown-item nav-login" type="button">
-                                    Sign in
-                                </button>
-                                <button class="dropdown-item" type="button">
-                                    Sign up
-                                </button>
+                                <?php
+                                    if(isset($_SESSION["username"])) {?>
+                                        <a href="logout.php" class="dropdown-item nav-login">Log out</a>
+                                        <?php } 
+                                        else{?>
+    
+                                            <button class="dropdown-item nav-login" type="button">
+                                                Sign in
+                                            </button>
+                                            <button class="dropdown-item nav-signup" type="button">
+                                                Sign up
+                                            </button>
+                                         <?php } ?>
                             </div>
                         </div>
                         <div class="btn-group mx-2">
@@ -327,5 +337,8 @@
             //Hide unhide login
             document.querySelector(".nav-login").addEventListener("click", function () {
                 document.querySelector(".login-popup").style.display ="flex";
+            });
+            document.querySelector(".nav-signup").addEventListener("click", function () {
+                document.querySelector(".signup-popup").style.display ="flex";
             });
         </script>

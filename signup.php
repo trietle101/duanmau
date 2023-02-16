@@ -3,9 +3,8 @@
     include_once("connect.php");
 
     if(isset($_POST["signup"])){
-        $stmt = $conn->prepare("INSERT INTO user (username, password, fullname, email, address, phonenumber, role) VALUES (?, ?, ?, ?, ?, ?,?)");
-        $stmt->execute(array($_POST["username"], $_POST["password"], $_POST["fullname"], $_POST["email"], $_POST["address"], $_POST["phonenumber"], $_POST["role"]));
-        echo "concac";
+        $stmt = $conn->prepare("INSERT INTO user (username, email, phone, password, role_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute(array($_POST["username"], $_POST["email"], $_POST["phone"], md5($_POST["password"]), $_POST["role_id"]));
         header("Location:index.php");
     }  
 ?>
@@ -20,15 +19,13 @@
     <link rel="stylesheet" href="assets/css/signup.css">
 </head>
 <body>
-    <div class="login-popup">
+    <div class="signup-popup">
         <form method="post" enctype="multipart/form-data" class="login-container">
             <input type="text" name="username" id="username" placeholder="Username" required>
             <input type="password" name="password" id="password" placeholder="Password" required>
-            <input type="text" name="fullname" placeholder="Fullname" required>
             <input type="text" name="email" placeholder="Email" required>
-            <input type="text" name="address" placeholder="Address" required>
-            <input type="text" name="phonenumber" placeholder="Phone number" required>
-            <select name="role">
+            <input type="text" name="phone" placeholder="Phone number" required>
+            <select name="role_id">
                 <option value="0">User</option>
                 <option value="1">Admin</option>
             </select>
