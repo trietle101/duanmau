@@ -1,7 +1,6 @@
 <?php
     session_start();
     include "connect.php";
-    $loggedin = false;
     if(isset($_POST["login"])){
         if(empty($_POST["username"]) || empty($_POST["password"])){
             echo '<label>All field is required</lable>';
@@ -18,7 +17,6 @@
             $user = $statement->fetch(PDO::FETCH_ASSOC);
             if($count > 0){
                 $_SESSION["username"] = $_POST["username"];
-                $_SESSION['loggedin'] = true;
                 if($user["role_id"] == 1){
                      header("Location:admin/index.php");
                 }
