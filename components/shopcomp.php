@@ -1,3 +1,8 @@
+<?php
+    //session_start();
+    include "connect.php";
+?>
+
 <!-- Breadcrumb Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
@@ -196,12 +201,10 @@
                         </div>
                     </div>
                     <?php
-                        session_start();
-                        include "connect.php";
                         try {
 
                             // Find out how many items are in the table
-                            $total = $conn->query('SELECT COUNT(*) FROM table')->fetchColumn();
+                            $total = $conn->query('SELECT COUNT(*) FROM product')->fetchColumn();
 
                             // How many items to list per page
                             $limit = 20;
@@ -234,18 +237,8 @@
                             echo '<div id="paging"><p>', $prevlink, ' Page ', $page, ' of ', $pages, ' pages, displaying ', $start, '-', $end, ' of ', $total, ' results ', $nextlink, ' </p></div>';
 
                             // Prepare the paged query
-                            $stmt = $dbh->prepare('
-                                SELECT
-                                    *
-                                FROM
-                                    table
-                                ORDER BY
-                                    name
-                                LIMIT
-                                    :limit
-                                OFFSET
-                                    :offset
-                            ');
+                            $stmt = $conn->prepare('
+                                SELECT * FROM product ORDER BY id LIMIT :limit OFFSET :offset');
 
                             // Bind the query params
                             $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
@@ -498,13 +491,21 @@
                     <div class="col-12">
                         <nav>
                           <ul class="pagination justify-content-center">
-                            <li class="page-item disabled"><?php $prevlink = ($page > 1) 
-                                                                    ? '<a href="?page=1" title="First page">&laquo;</a> <a href="?page=' . ($page - 1) . '" title="Previous page">&lsaquo;</a>' 
-                                                                    : '<span class="disabled">&laquo;</span> <span class="disabled">&lsaquo;</span>';?></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"> <?php $prevlink = ($page > 1) 
+                                                                ? '<a href="?page=' . ($page - 1) . '" title="Previous page">&lsaquo;</a>'
+                                                                : '<span class="disabled page-link">&lsaquo;</span>';
+                                                                echo $prevlink;
+                                                            ?>
+                            </li>
+                            <li class="page-item"><a class="page-link active" href="#">1</a></li>
                             <li class="page-item"><a class="page-link" href="#">2</a></li>
                             <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            <li class="page-item">  <?php $nextlink = ($page < $pages) 
+                                                        ? '<a href="?page=' . ($page + 1) . '" class="page-link" title="Next page">&rsaquo;</a>' 
+                                                        : '<span class="disabled page-link">&rsaquo;</span>';
+                                                        echo $nextlink;
+                                                    ?>
+                            </li>
                           </ul>
                         </nav>
                     </div>
@@ -513,4 +514,15 @@
             <!-- Shop Product End -->
         </div>
     </div>
+    <script>
+        var element = document.getElementsByClassName("pagination")[0];
+        element.addEventListener('click', function(e) {
+		    var elems = document.querySelector(".active");
+            if(elems !=null) {
+                elems.classList.remove("active");
+            }
+            e.target.classList.add("active");
+        });
+
+    </script>
     <!-- Shop End -->
