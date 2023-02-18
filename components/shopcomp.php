@@ -164,6 +164,10 @@
                             </div>
                         </div>
                     </div>
+                    
+                    
+                    
+                    
                     <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
@@ -191,7 +195,91 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                    <?php
+                        session_start();
+                        include "connect.php";
+                        try {
+
+                            // Find out how many items are in the table
+                            $total = $conn->query('SELECT COUNT(*) FROM table')->fetchColumn();
+
+                            // How many items to list per page
+                            $limit = 20;
+
+                            // How many pages will there be
+                            $pages = ceil($total / $limit);
+
+                            // What page are we currently on?
+                            $page = min($pages, filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, array(
+                                'options' => array(
+                                    'default'   => 1,
+                                    'min_range' => 1,
+                                ),
+                            )));
+
+                            // Calculate the offset for the query
+                            $offset = ($page - 1)  * $limit;
+
+                            // Some information to display to the user
+                            $start = $offset + 1;
+                            $end = min(($offset + $limit), $total);
+
+                            // The "back" link
+                            $prevlink = ($page > 1) ? '<a href="?page=1" title="First page">&laquo;</a> <a href="?page=' . ($page - 1) . '" title="Previous page">&lsaquo;</a>' : '<span class="disabled">&laquo;</span> <span class="disabled">&lsaquo;</span>';
+
+                            // The "forward" link
+                            $nextlink = ($page < $pages) ? '<a href="?page=' . ($page + 1) . '" title="Next page">&rsaquo;</a> <a href="?page=' . $pages . '" title="Last page">&raquo;</a>' : '<span class="disabled">&rsaquo;</span> <span class="disabled">&raquo;</span>';
+
+                            // Display the paging information
+                            echo '<div id="paging"><p>', $prevlink, ' Page ', $page, ' of ', $pages, ' pages, displaying ', $start, '-', $end, ' of ', $total, ' results ', $nextlink, ' </p></div>';
+
+                            // Prepare the paged query
+                            $stmt = $dbh->prepare('
+                                SELECT
+                                    *
+                                FROM
+                                    table
+                                ORDER BY
+                                    name
+                                LIMIT
+                                    :limit
+                                OFFSET
+                                    :offset
+                            ');
+
+                            // Bind the query params
+                            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+                            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+                            $stmt->execute();
+
+                            // Do we have any results?
+                            if ($stmt->rowCount() > 0) {
+                                // Define how we want to fetch the results
+                                $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                                $iterator = new IteratorIterator($stmt);
+
+                                // Display the results
+                                foreach ($iterator as $row) {
+                                    echo '<p>', $row['name'], '</p>';
+                                }
+
+                            } else {
+                                echo '<p>No results could be displayed.</p>';
+                            }
+
+                        } catch (Exception $e) {
+                            echo '<p>', $e->getMessage(), '</p>';
+                        }
+                    ?>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <!-- <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
                                 <img class="img-fluid w-100" src="assets/img/product-2.jpg" alt="">
@@ -406,11 +494,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-12">
                         <nav>
                           <ul class="pagination justify-content-center">
-                            <li class="page-item disabled"><a class="page-link" href="#">Previous</span></a></li>
+                            <li class="page-item disabled"><?php $prevlink = ($page > 1) 
+                                                                    ? '<a href="?page=1" title="First page">&laquo;</a> <a href="?page=' . ($page - 1) . '" title="Previous page">&lsaquo;</a>' 
+                                                                    : '<span class="disabled">&laquo;</span> <span class="disabled">&lsaquo;</span>';?></li>
                             <li class="page-item active"><a class="page-link" href="#">1</a></li>
                             <li class="page-item"><a class="page-link" href="#">2</a></li>
                             <li class="page-item"><a class="page-link" href="#">3</a></li>

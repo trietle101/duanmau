@@ -21,7 +21,7 @@
 <body>
     <div class="signup-popup">
         <form method="post" enctype="multipart/form-data" class="login-container">
-            <input type="text" name="username" id="username" placeholder="Username" required>
+            <img href="assets/img/cat-3.jpg" style="w/><input type="text" name="username" id="username" placeholder="Username" required>
             <input type="password" name="password" id="password" placeholder="Password" required>
             <input type="text" name="email" placeholder="Email" required>
             <input type="text" name="phone" placeholder="Phone number" required>
@@ -32,5 +32,4 @@
             <button type="submit" name="signup" class="login">Signup</button>
         </form>
     </div>
-</body>
-</html>
+</body
