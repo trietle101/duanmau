@@ -497,7 +497,7 @@
                                                                 echo $prevlink;
                                                             ?>
                             </li>
-                            <li class="page-item"><a class="page-link active" href="#">1</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
                             <li class="page-item"><a class="page-link" href="#">2</a></li>
                             <li class="page-item"><a class="page-link" href="#">3</a></li>
                             <li class="page-item">  <?php $nextlink = ($page < $pages) 
@@ -517,12 +517,9 @@
     <script>
         var element = document.getElementsByClassName("pagination")[0];
         element.addEventListener('click', function(e) {
-		    var elems = document.querySelector(".active");
-            if(elems !=null) {
-                elems.classList.remove("active");
-            }
-            e.target.classList.add("active");
+		    var elems = document.querySelector(".page-item.active");
+            elems.classList.remove("active");
+            e.target.closest('.page-item').classList.add("active");
         });
-
     </script>
     <!-- Shop End -->
