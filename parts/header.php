@@ -1,3 +1,8 @@
+<?php
+    session_start();
+    include "connect.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -271,7 +276,7 @@
                                     class="nav-item nav-link active"
                                     >Home</a
                                 >
-                                <a href="shop.html" class="nav-item nav-link"
+                                <a href="shop.php" class="nav-item nav-link"
                                     >Shop</a
                                 >
                                 <a href="detail.html" class="nav-item nav-link"
@@ -315,15 +320,26 @@
                                         >0</span
                                     >
                                 </a>
-                                <a href="" class="btn px-0 ml-3">
+                                <a href="cart.php" class="btn px-0 ml-3">
                                     <i
                                         class="fas fa-shopping-cart text-primary"
                                     ></i>
                                     <span
                                         class="badge text-secondary border border-secondary rounded-circle"
                                         style="padding-bottom: 2px"
-                                        >0</span
-                                    >
+                                        ><?php  
+                                            $sum=0;
+                                            $total=0;
+                                            if(isset($_SESSION['cart'])){
+                                                foreach($_SESSION['cart'] as $value){
+                                                    $sum = $sum + $value['sl'];
+                                                    $total = $total + $value['product']['discount']*$value['sl'];
+                                                }
+                                                echo $sum ."-". $total;                                                
+                                            }
+                                            else echo "0-0";
+                                        ?>
+                                    </span>
                                 </a>
                             </div>
                         </div>

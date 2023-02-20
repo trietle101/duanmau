@@ -1,6 +1,4 @@
 <?php
-    session_start();
-    include_once("connect.php");
 
     if(isset($_POST["signup"])){
         $stmt = $conn->prepare("INSERT INTO user (username, email, phone, password, role_id) VALUES (?, ?, ?, ?, ?)");

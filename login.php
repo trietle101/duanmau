@@ -1,6 +1,4 @@
 <?php
-    session_start();
-    include "connect.php";
     if(isset($_POST["login"])){
         if(empty($_POST["username"]) || empty($_POST["password"])){
             echo '<label>All field is required</lable>';
@@ -24,10 +22,6 @@
                     header("Location:index.php");
                 }
             }
-            // else{
-            //     $message = '<label>Username or password is wrong</lable>';
-            //     echo "<h1>wrong password</h1>";
-            // }
         }
     }
 
