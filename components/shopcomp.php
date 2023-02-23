@@ -174,7 +174,7 @@
                             $total = $conn->query('SELECT COUNT(*) FROM product')->fetchColumn();
 
                             // How many items to list per page
-                            $limit = 2;
+                            $limit = 8;
 
                             // How many pages will there be
                             $pages = ceil($total / $limit);
